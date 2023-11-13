@@ -14,6 +14,11 @@ const BASE_URL = "https://api.tvmaze.com";
  *    (if no image URL given by API, put in a default image URL)
  */
 
+interface DataInterface {
+  score: number,
+  show: ShowsInterface;
+}
+
 interface ShowsInterface {
   id: number;
   name: string;
@@ -23,11 +28,9 @@ interface ShowsInterface {
 
 async function searchShowsByTerm(term: string): Promise<ShowsInterface[]> {
 
-  const params: URLSearchParams = new URLSearchParams(term);
-
-  const response: Response = await fetch(`${BASE_URL}/search/shows${params}`);
-  const data: ShowsInterface[] = await response.json();
-  return data;
+  const response: Response = await fetch(`${BASE_URL}/search/shows?q=${term}`);
+  const data: DataInterface[] = await response.json();
+  return data.map(obj => obj.show);
   // {
   //   id: 1767,
   //   name: "The Bletchley Circle",
@@ -50,7 +53,7 @@ async function searchShowsByTerm(term: string): Promise<ShowsInterface[]> {
 
 /** Given list of shows, create markup for each and to DOM */
 
-function populateShows(shows) {
+function populateShows(shows: ShowsInterface[]): void {
   $showsList.empty();
 
   for (let show of shows) {
@@ -58,8 +61,8 @@ function populateShows(shows) {
       `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img
-              src="http://static.tvmaze.com/uploads/images/medium_portrait/160/401704.jpg"
-              alt="Bletchly Circle San Francisco"
+              src=${show.image}
+              alt=${show.name}
               class="w-25 me-3">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
@@ -82,9 +85,10 @@ function populateShows(shows) {
  */
 
 async function searchForShowAndDisplay() {
-  const term = $("#searchForm-term").val();
+  const term: string = $("#searchForm-term").val();
+  console.log(term);
   const shows = await searchShowsByTerm(term);
-
+  console.log(shows);
   $episodesArea.hide();
   populateShows(shows);
 }
