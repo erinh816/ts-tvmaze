@@ -10782,6 +10782,12 @@ var $showsList = $("#showsList");
 var $episodesArea = $("#episodesArea");
 var $searchForm = $("#searchForm");
 var BASE_URL = "https://api.tvmaze.com";
+// interface ShowsInterface {
+//   id: number;
+//   name: string;
+//   summary: string;
+//   image: string;
+// }
 function searchShowsByTerm(term) {
     return __awaiter(this, void 0, void 0, function () {
         var response, data;
@@ -10800,10 +10806,11 @@ function searchShowsByTerm(term) {
 }
 /** Given list of shows, create markup for each and to DOM */
 function populateShows(shows) {
+    console.log("shows in populate", shows);
     $showsList.empty();
     for (var _i = 0, shows_1 = shows; _i < shows_1.length; _i++) {
         var show = shows_1[_i];
-        var $show = $("<div data-show-id=\"".concat(show.id, "\" class=\"Show col-md-12 col-lg-6 mb-4\">\n         <div class=\"media\">\n           <img\n              src=").concat(show.image, "\n              alt=").concat(show.name, "\n              class=\"w-25 me-3\">\n           <div class=\"media-body\">\n             <h5 class=\"text-primary\">").concat(show.name, "</h5>\n             <div><small>").concat(show.summary, "</small></div>\n             <button class=\"btn btn-outline-light btn-sm Show-getEpisodes\">\n               Episodes\n             </button>\n           </div>\n         </div>\n       </div>\n      "));
+        var $show = $("<div data-show-id=\"".concat(show, "\" class=\"Show col-md-12 col-lg-6 mb-4\">\n         <div class=\"media\">\n           <img\n              src=").concat(show, "\n              alt=").concat(show, "\n              class=\"w-25 me-3\">\n           <div class=\"media-body\">\n             <h5 class=\"text-primary\">").concat(show, "</h5>\n             <div><small>").concat(show, "</small></div>\n             <button class=\"btn btn-outline-light btn-sm Show-getEpisodes\">\n               Episodes\n             </button>\n           </div>\n         </div>\n       </div>\n      "));
         $showsList.append($show);
     }
 }

@@ -16,17 +16,17 @@ const BASE_URL = "https://api.tvmaze.com";
 
 interface DataInterface {
   score: number,
-  show: ShowsInterface;
+  show: object;
 }
 
-interface ShowsInterface {
-  id: number;
-  name: string;
-  summary: string;
-  image: string;
-}
+// interface ShowsInterface {
+//   id: number;
+//   name: string;
+//   summary: string;
+//   image: string;
+// }
 
-async function searchShowsByTerm(term: string): Promise<ShowsInterface[]> {
+async function searchShowsByTerm(term: string): Promise<object[]> {
 
   const response: Response = await fetch(`${BASE_URL}/search/shows?q=${term}`);
   const data: DataInterface[] = await response.json();
@@ -51,22 +51,24 @@ async function searchShowsByTerm(term: string): Promise<ShowsInterface[]> {
 }
 
 
+
 /** Given list of shows, create markup for each and to DOM */
 
-function populateShows(shows: ShowsInterface[]): void {
+function populateShows(shows: object[]): void {
+  console.log("shows in populate", shows);
   $showsList.empty();
 
   for (let show of shows) {
     const $show = $(
-      `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
+      `<div data-show-id="${show}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img
-              src=${show.image}
-              alt=${show.name}
+              src=${show}
+              alt=${show}
               class="w-25 me-3">
            <div class="media-body">
-             <h5 class="text-primary">${show.name}</h5>
-             <div><small>${show.summary}</small></div>
+             <h5 class="text-primary">${show}</h5>
+             <div><small>${show}</small></div>
              <button class="btn btn-outline-light btn-sm Show-getEpisodes">
                Episodes
              </button>
