@@ -79,7 +79,7 @@ function populateShows(shows: ShowsInterface[]): void {
 async function searchForShowAndDisplay() {
   const term: string | number = $("#searchForm-term").val() as string | number;
   console.log(term);
-  const shows: object[] = await searchShowsByTerm(term.toString());
+  const shows: ShowsInterface[] = await searchShowsByTerm(term.toString());
   console.log(shows);
   $episodesArea.hide();
   populateShows(shows);
