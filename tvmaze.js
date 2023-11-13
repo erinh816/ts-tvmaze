@@ -10782,12 +10782,12 @@ var $showsList = $("#showsList");
 var $episodesArea = $("#episodesArea");
 var $searchForm = $("#searchForm");
 var BASE_URL = "https://api.tvmaze.com";
-// interface ShowsInterface {
-//   id: number;
-//   name: string;
-//   summary: string;
-//   image: string;
-// }
+/** Given a search term, search for tv shows that match that query.
+ *
+ *  Returns (promise) array of show objects: [show, show, ...].
+ *    Each show object should contain exactly: {id, name, summary, image}
+ *    (if no image URL given by API, put in a default image URL)
+ */
 function searchShowsByTerm(term) {
     return __awaiter(this, void 0, void 0, function () {
         var response, data;
@@ -10799,7 +10799,14 @@ function searchShowsByTerm(term) {
                     return [4 /*yield*/, response.json()];
                 case 2:
                     data = _a.sent();
-                    return [2 /*return*/, data.map(function (obj) { return obj.show; })];
+                    return [2 /*return*/, data.map(function (obj) { return ({
+                            id: obj.show.id,
+                            name: obj.show.name,
+                            summary: obj.show.summary,
+                            image: {
+                                medium: obj.show.image.medium, original: obj.show.image.original
+                            }
+                        }); })];
             }
         });
     });
@@ -10810,7 +10817,7 @@ function populateShows(shows) {
     $showsList.empty();
     for (var _i = 0, shows_1 = shows; _i < shows_1.length; _i++) {
         var show = shows_1[_i];
-        var $show = $("<div data-show-id=\"".concat(show, "\" class=\"Show col-md-12 col-lg-6 mb-4\">\n         <div class=\"media\">\n           <img\n              src=").concat(show, "\n              alt=").concat(show, "\n              class=\"w-25 me-3\">\n           <div class=\"media-body\">\n             <h5 class=\"text-primary\">").concat(show, "</h5>\n             <div><small>").concat(show, "</small></div>\n             <button class=\"btn btn-outline-light btn-sm Show-getEpisodes\">\n               Episodes\n             </button>\n           </div>\n         </div>\n       </div>\n      "));
+        var $show = $("<div data-show-id=\"".concat(show.id, "\" class=\"Show col-md-12 col-lg-6 mb-4\">\n         <div class=\"media\">\n           <img\n              src=").concat(show.image.medium, "\n              alt=").concat(show.name, "\n              class=\"w-25 me-3\">\n           <div class=\"media-body\">\n             <h5 class=\"text-primary\">").concat(show.name, "</h5>\n             <div><small>").concat(show.summary, "</small></div>\n             <button class=\"btn btn-outline-light btn-sm Show-getEpisodes\">\n               Episodes\n             </button>\n           </div>\n         </div>\n       </div>\n      "));
         $showsList.append($show);
     }
 }
@@ -10825,7 +10832,7 @@ function searchForShowAndDisplay() {
                 case 0:
                     term = $("#searchForm-term").val();
                     console.log(term);
-                    return [4 /*yield*/, searchShowsByTerm(term)];
+                    return [4 /*yield*/, searchShowsByTerm(term.toString())];
                 case 1:
                     shows = _a.sent();
                     console.log(shows);
