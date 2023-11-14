@@ -13,14 +13,21 @@ const DEFAULT_IMG = 'https://static.wikia.nocookie.net/d4f2425a-cfaf-41c2-8ecf-c
 
 interface DataInterface {
   score: number,
-  show: ShowsInterface;
+  show: {
+    id: number,
+    name: string,
+    summary: string | null,
+    image: {
+      medium: string;
+    } | null,
+  };
 }
 
 interface ShowsInterface {
   id: number,
   name: string,
   summary: string | null,
-  image: { medium: string, original: string; } | null,
+  image: string,
 }
 
 interface EpisodesInterface {
@@ -44,9 +51,7 @@ async function searchShowsByTerm(term: string): Promise<ShowsInterface[]> {
     id: obj.show.id,
     name: obj.show.name,
     summary: obj.show.summary,
-    image: {
-      medium: obj.show.image.medium, original: obj.show.image.original
-    } || null
+    image: obj.show.image?.medium || DEFAULT_IMG
   }));
 }
 
@@ -63,7 +68,7 @@ function populateShows(shows: ShowsInterface[]): void {
       `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img
-              src=${show.image.medium || DEFAULT_IMG}
+              src=${show.image}
               alt=${show.name}
               class="w-25 me-3">
            <div class="media-body">
