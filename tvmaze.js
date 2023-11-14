@@ -10816,7 +10816,6 @@ function searchShowsByTerm(term) {
 }
 /** Given list of shows, create markup for each and to DOM */
 function populateShows(shows) {
-    console.log("shows in populate", shows);
     $showsList.empty();
     for (var _i = 0, shows_1 = shows; _i < shows_1.length; _i++) {
         var show = shows_1[_i];
@@ -10893,13 +10892,13 @@ function populateEpisodes(episodes) {
     $episodesList.empty();
     for (var _i = 0, episodes_1 = episodes; _i < episodes_1.length; _i++) {
         var episode = episodes_1[_i];
-        var $episode = $("\n         <li>".concat(episode.name, " (season ").concat(episode.season, "), number ").concat(episode.number, "</li>\n      "));
+        var $episode = ($("<li>".concat(episode.name, " (season ").concat(episode.season, "), number ").concat(episode.number, "</li>")));
         $episodesList.append($episode);
     }
     $episodesArea.show();
 }
 /** Handle button click: get episodes from API and displays. */
-function searchForEpisodesAndDisplay(evt) {
+function getEpisodesAndDisplay(evt) {
     return __awaiter(this, void 0, void 0, function () {
         var id, episodes;
         return __generator(this, function (_a) {
@@ -10907,22 +10906,21 @@ function searchForEpisodesAndDisplay(evt) {
                 case 0:
                     console.log(evt.target);
                     id = $(evt.target).closest('button').attr("data-show-id");
-                    console.log(id);
                     return [4 /*yield*/, getEpisodesOfShow(Number(id))];
                 case 1:
                     episodes = _a.sent();
-                    console.log(episodes);
                     populateEpisodes(episodes);
                     return [2 /*return*/];
             }
         });
     });
 }
+;
 $showsList.on("click", ".Show-getEpisodes", function (evt) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, searchForEpisodesAndDisplay(evt)];
+                case 0: return [4 /*yield*/, getEpisodesAndDisplay(evt)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];

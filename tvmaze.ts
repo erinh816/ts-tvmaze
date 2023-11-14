@@ -55,12 +55,9 @@ async function searchShowsByTerm(term: string): Promise<ShowsInterface[]> {
   }));
 }
 
-
-
 /** Given list of shows, create markup for each and to DOM */
 
 function populateShows(shows: ShowsInterface[]): void {
-  console.log("shows in populate", shows);
   $showsList.empty();
 
   for (let show of shows) {
@@ -85,7 +82,6 @@ function populateShows(shows: ShowsInterface[]): void {
     $showsList.append($show);
   }
 }
-
 
 /** Handle search form submission: get shows from API and display.
  *    Hide episodes area (that only gets shown if they ask for episodes)
@@ -130,10 +126,10 @@ function populateEpisodes(episodes: EpisodesInterface[]): void {
   $episodesList.empty();
 
   for (let episode of episodes) {
-    const $episode = $(
-      `
-         <li>${episode.name} (season ${episode.season}), number ${episode.number}</li>
-      `);
+    const $episode = (
+      $(
+        `<li>${episode.name} (season ${episode.season}), number ${episode.number}</li>`
+      ));
 
     $episodesList.append($episode);
   }
@@ -142,16 +138,14 @@ function populateEpisodes(episodes: EpisodesInterface[]): void {
 
 /** Handle button click: get episodes from API and displays. */
 
-async function searchForEpisodesAndDisplay(evt) {
+async function getEpisodesAndDisplay(evt: JQuery.ClickEvent): Promise<void> {
   console.log(evt.target);
-  const id: string = $(evt.target).closest('button').attr("data-show-id");
-  console.log(id);
+  const id: string = $(evt.target).closest('button').attr("data-show-id") as string;
   const episodes: EpisodesInterface[] = await getEpisodesOfShow(Number(id));
-  console.log(episodes);
 
   populateEpisodes(episodes);
-}
+};
 
 $showsList.on("click", ".Show-getEpisodes", async function (evt) {
-  await searchForEpisodesAndDisplay(evt);
+  await getEpisodesAndDisplay(evt);
 });
